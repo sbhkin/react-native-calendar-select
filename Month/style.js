@@ -6,8 +6,7 @@ const {scale, width} = Dimensions.get('window');
 
 export default StyleSheet.create({
   month: {
-    paddingTop: 15,
-    paddingBottom: 10
+    height: 304,
   },
   monthTitle: {
     paddingHorizontal: 20
