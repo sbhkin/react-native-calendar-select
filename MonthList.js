@@ -49,7 +49,11 @@ export default class MonthList extends Component {
     return (
       <Month
         month={month.date || {}}
-        {...this.props}
+        color={{subColor: '#FFF'}}
+        i18n = {this.props.i18n}
+        today ={this.props.today}
+
+        // {...this.props}
       />
     );
   }

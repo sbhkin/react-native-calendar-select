@@ -17,7 +17,7 @@ export default StyleSheet.create({
     fontWeight: '300'
   },
   dayRow: {
-    flex: 1,
+    height : 40,
     flexDirection: 'row',
     alignSelf: 'stretch',
     alignItems: 'center',
