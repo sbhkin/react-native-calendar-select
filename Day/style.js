@@ -27,12 +27,11 @@ export default StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.40)'
   },
   day: {
+    flex:1,
     width: dayWidth,
-    height: dayWidth,
-    borderRadius: dayWidth / 2,
+    borderRadius: 8,
     overflow: 'hidden',
-    justifyContent: 'center',
-    alignItems: 'center'
+    paddingVertical: 4,
   },
   dayText: {
     fontSize: 16,
@@ -43,5 +42,17 @@ export default StyleSheet.create({
     fontSize: 16,
     color: 'rgba(255, 255, 255, 0.54)',
     textAlign: 'center'
+  },
+  eventsContainer:{
+    paddingTop: 4,
+    flex: 1,
+  },
+  eventsTextFocus:{
+    color: 'white'
+  },
+  eventText: {
+    color: '#4d4d4d',
+    fontSize: 8,
+    fontWeight: '100',
   }
 });

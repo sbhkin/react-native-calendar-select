@@ -16,9 +16,20 @@ import Day from '../Day';
 export default class Month extends Component {
   constructor (props) {
     super(props);
+    const {
+      month,
+      today,
+      color
+    } = this.props;
     this._getDayList = this._getDayList.bind(this);
     this._renderDayRow = this._renderDayRow.bind(this);
     this._getMonthText = this._getMonthText.bind(this);
+    this.subColor = {color: color.subColor};
+    this.titleText = this._getMonthText();
+    this.dayList = this._getDayList(month.clone());
+    this.rowArray = new Array(this.dayList.length / 7).fill('');
+    this.state ={titleText: this.titleText, month: month, dayList: this.dayList, rowArray: this.rowArray};
+
   }
   static I18N_MAP = {
     'zh': [
@@ -54,6 +65,7 @@ export default class Month extends Component {
   }
   _getDayList (date) {
     let dayList;
+    console.log(date.week())
     let month = date.month();
     let weekday = date.isoWeekday();
     if (weekday === 7) {
@@ -68,6 +80,7 @@ export default class Month extends Component {
         date: date.clone()
       });
       date.add(1, 'days');
+      // console.log(date.isoWeekday()+','+date.month()+","+date.date());
     }
     date.subtract(1, 'days');
     weekday = date.isoWeekday();
@@ -84,10 +97,20 @@ export default class Month extends Component {
     const {
       startDate,
       endDate,
-      today
+      today,
+      chooseday,
+      month,
     } = this.props;
+    var rowstyle = styles.dayRow;
+    if(chooseday && chooseday.year() == month.year()){
+      if(dayList[0].empty && dayList[0].empty.week() == chooseday.week()){
+        rowstyle = styles.dayRowExpand;
+      }else if(dayList[0].date && dayList[0].date.week() == chooseday.week()){
+        rowstyle = styles.dayRowExpand;
+      }
+    }
     return (
-      <View style={styles.dayRow} key={'row' + index}>
+      <View style={rowstyle} key={'row' + index}>
         {dayList.map((item, i) =>
           <Day
             date={item.date}
@@ -98,24 +121,34 @@ export default class Month extends Component {
       </View>
     );
   }
+
+  componentWillReceiveProps(nextProps){
+    // const {
+    //   month,
+    //   today,
+    //   color,
+    //   key,
+    // } = nextProps;
+    // if(nextProps.month != this.props.month) {
+    //   this.subColor = {color: color.subColor};
+    //   this.titleText = this._getMonthText();
+    //   this.dayList = this._getDayList(month.clone());
+    //   this.rowArray = new Array(this.dayList.length / 7).fill('');
+    //   this.setState({titleText: this.titleText, month: month, dayList: this.dayList, rowArray: this.rowArray});
+    // }
+
+  }
   render () {
-    const {
-      month,
-      today,
-      color
-    } = this.props;
-    let subColor = {color: color.subColor};
-    let titleText = this._getMonthText();
-    let dayList = this._getDayList(month.clone());
-    let rowArray = new Array(dayList.length / 7).fill('');
+    console.log('CAL: MONTH:',+this.state.month.format('YYYYMM'));
+
     return (
       <View style={styles.month}>
         <View style={styles.monthTitle}>
-          <Text style={[styles.monthTitleText, subColor]}>{titleText}</Text>
+          <Text style={[styles.monthTitleText, this.subColor]}>{this.state.titleText}</Text>
         </View>
         <View style={styles.days}>
-          {rowArray.map((item, i) =>
-            this._renderDayRow(dayList.slice(i * 7, i * 7 + 7), i)
+          {this.state.rowArray.map((item, i) =>
+            this._renderDayRow(this.state.dayList.slice(i * 7, i * 7 + 7), i)
           )}
         </View>
       </View>
