@@ -6,7 +6,7 @@ const {scale, width} = Dimensions.get('window');
 
 export default StyleSheet.create({
   month: {
-    height: 304,
+    height:304,
   },
   monthTitle: {
     paddingHorizontal: 20
@@ -21,6 +21,13 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'stretch',
     alignItems: 'center',
-    paddingVertical: 5
+  },
+  dayRowExpand: {
+    height:80,
+    backgroundColor:'#f5f5f5',
+    flexDirection: 'row',
+  },
+  days:{
+    flex:1
   }
 });
