@@ -13,22 +13,26 @@ import Moment from 'moment';
 import styles from './style';
 import Day from '../Day';
 
+
 export default class Month extends Component {
   constructor (props) {
     super(props);
     const {
       month,
       today,
-      color
+      color,
+      events,
+      chooseday,
     } = this.props;
     this._getDayList = this._getDayList.bind(this);
     this._renderDayRow = this._renderDayRow.bind(this);
     this._getMonthText = this._getMonthText.bind(this);
+    this._mapEvents = this._mapEvents.bind(this);
     this.subColor = {color: color.subColor};
     this.titleText = this._getMonthText();
-    this.dayList = this._getDayList(month.clone());
+    this.dayList = this._mapEvents(this._getDayList(month.clone()), events);
     this.rowArray = new Array(this.dayList.length / 7).fill('');
-    this.state ={titleText: this.titleText, month: month, dayList: this.dayList, rowArray: this.rowArray};
+    this.state ={titleText: this.titleText, month: month, dayList: this.dayList, rowArray: this.rowArray,chooseday: today};
 
   }
   static I18N_MAP = {
@@ -41,10 +45,18 @@ export default class Month extends Component {
       '七月', '八月', '九月', '十月', '十一月', '十二月'
     ],
     'en': [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ]
   }
+
+  _onChooseDay(day, event){
+    this.props.onChooseDay(day, event)
+    this.setState({
+      chooseday: day
+    })
+  }
+
   _getMonthText () {
     const {
       month,
@@ -65,7 +77,6 @@ export default class Month extends Component {
   }
   _getDayList (date) {
     let dayList;
-    console.log(date.week())
     let month = date.month();
     let weekday = date.isoWeekday();
     if (weekday === 7) {
@@ -93,29 +104,63 @@ export default class Month extends Component {
       empty: date.clone().hour(1)
     }));
   }
+
+  _mapEvents(dayList, eventlist) {
+    dayList =  dayList.map((item,index) =>
+    {
+      var  event = null;
+      if(eventlist != null && item.date !=null) {
+        // let thedate = item.date.format('X')
+        let dayStartStr = item.date.format('X')
+        let theedate = item.date.clone().add(1,'d')
+        let dayEndStr = theedate.format('X')
+        //Check inBetween
+        event = eventlist.filtered('startDate <= '+dayStartStr+' && '+dayStartStr+' <= endDate || startDate >='+dayStartStr+' && startDate <= '+dayEndStr)
+        // //Check isEnd
+        // event =
+        // event = eventlist.find((ev) =>{ return ev.startDate.isSame(item.date,'day') || ev.endDate.isSame(item.date,'day')});
+      }
+
+      return(
+        {
+          date: item.date,
+          empty: item.empty,
+          event : event
+        }
+      )
+    });
+    return dayList;
+  }
+
   _renderDayRow (dayList, index) {
     const {
       startDate,
       endDate,
       today,
-      chooseday,
       month,
     } = this.props;
     var rowstyle = styles.dayRow;
-    if(chooseday && chooseday.year() == month.year()){
-      if(dayList[0].empty && dayList[0].empty.week() == chooseday.week()){
+    var isExpand = false;
+    if(this.state.chooseday && this.state.chooseday.year() == month.year()){
+      if(dayList[0].empty && dayList[0].empty.week() == this.state.chooseday.week()){
         rowstyle = styles.dayRowExpand;
-      }else if(dayList[0].date && dayList[0].date.week() == chooseday.week()){
+        isExpand = true;
+      }else if(dayList[0].date && dayList[0].date.week() == this.state.chooseday.week()){
         rowstyle = styles.dayRowExpand;
+        isExpand = true;
       }
     }
     return (
       <View style={rowstyle} key={'row' + index}>
         {dayList.map((item, i) =>
           <Day
+            isExpand={isExpand}
+            event={item.event}
             date={item.date}
             empty={item.empty}
+            onChoose = {this._onChooseDay.bind(this)}
             {...this.props}
+            chooseday = {this.state.chooseday}
             key={'day' + i}/>
         )}
       </View>
@@ -139,12 +184,19 @@ export default class Month extends Component {
 
   }
   render () {
-    console.log('CAL: MONTH:',+this.state.month.format('YYYYMM'));
-
     return (
       <View style={styles.month}>
         <View style={styles.monthTitle}>
           <Text style={[styles.monthTitleText, this.subColor]}>{this.state.titleText}</Text>
+        </View>
+        <View style={styles.weekbar}>
+          <Text style={[styles.weekText,styles.weekTextWeekend]}>S</Text>
+          <Text style={styles.weekText}>M</Text>
+          <Text style={styles.weekText}>T</Text>
+          <Text style={styles.weekText}>W</Text>
+          <Text style={styles.weekText}>T</Text>
+          <Text style={styles.weekText}>F</Text>
+          <Text style={[styles.weekText,styles.weekTextWeekend]}>S</Text>
         </View>
         <View style={styles.days}>
           {this.state.rowArray.map((item, i) =>

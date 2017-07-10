@@ -6,10 +6,12 @@ const {scale, width} = Dimensions.get('window');
 
 export default StyleSheet.create({
   month: {
-    height:304,
+    height:346,
   },
   monthTitle: {
-    paddingHorizontal: 20
+    height:40,
+    justifyContent: 'center',
+    paddingHorizontal: 16,
   },
   monthTitleText: {
     fontSize: 24,
@@ -29,5 +31,20 @@ export default StyleSheet.create({
   },
   days:{
     flex:1
-  }
+  },
+  weekText : {
+  flex: 1,
+  fontSize:12,
+  color: '#4d4d4d',
+  textAlign:'center',
+},
+weekTextWeekend: {
+  color: '#a0a0a0'
+},
+weekbar: {
+  height:16,
+  marginVertical:20,
+  flexDirection: 'row',
+},
+
 });

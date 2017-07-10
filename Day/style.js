@@ -29,14 +29,46 @@ export default StyleSheet.create({
   day: {
     flex:1,
     width: dayWidth,
-    borderRadius: 8,
     overflow: 'hidden',
-    paddingVertical: 4,
+    alignItems:'center',
+  },
+  bubble: {
+    borderRadius: 16,
+    height: 32,
+    width: 32,
+    justifyContent: 'center',
+    paddingTop: 0,
+    overflow: 'hidden',
+  },
+  bubbleExpanded: {
+    width: dayWidth,
+    flex: 1,
+    borderRadius: 8,
+    paddingTop : 4,
+    overflow: 'hidden',
+  },
+  startPart :{
+    borderRightWidth: 0,
+    width: dayWidth,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+  },
+  endPart :{
+    borderLeftWidth: 0,
+    width: dayWidth,
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius : 0,
+  },
+  noRadius :{
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    width: dayWidth,
+    borderRadius: 0,
   },
   dayText: {
     fontSize: 16,
     fontWeight: '400',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   dayTextDisabled: {
     fontSize: 16,
