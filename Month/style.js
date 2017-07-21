@@ -19,7 +19,7 @@ export default StyleSheet.create({
     fontWeight: '300'
   },
   dayRow: {
-    height : 40,
+    flex: 1,
     flexDirection: 'row',
     alignSelf: 'stretch',
     alignItems: 'center',
